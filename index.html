@@ -3,698 +3,506 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>晚餐選擇障礙解答機 🍲</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;700;900&display=swap" rel="stylesheet">
+  <title>晚餐選擇障礙解答機 🍱</title>
   
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            warm: {
-              50: '#FFFDF9',
-              100: '#FFF7ED',
-              200: '#FFEDD5',
-              300: '#FDBA74',
-              400: '#FB923C',
-              500: '#F97316',
-              600: '#EA580C',
-            },
-            cream: '#FFFBEB',
-          },
-          fontFamily: {
-            rounded: ['"Zen Maru Gothic"', 'sans-serif'],
-          },
-          boxShadow: {
-            'cute': '0 6px 0px 0px rgba(234, 88, 12, 0.25)',
-            'cute-pressed': '0 2px 0px 0px rgba(234, 88, 12, 0.25)',
-            'card': '0 10px 25px -5px rgba(249, 115, 22, 0.12), 0 8px 10px -6px rgba(249, 115, 22, 0.08)',
-          }
-        }
-      }
-    }
-  </script>
+  <!-- PWA & Mobile Optimization -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="晚餐解答機">
+  <link rel="apple-touch-icon" href="https://fav.farm/🍱">
+  <link rel="icon" href="https://fav.farm/🍱">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
   <style>
-    body {
-      font-family: 'Zen Maru Gothic', sans-serif;
-      background-color: #FFFDF9;
-      background-image: radial-gradient(#FDBA74 0.75px, transparent 0.75px), radial-gradient(#FDBA74 0.75px, #FFFDF9 0.75px);
-      background-size: 28px 28px;
-      background-position: 0 0, 14px 14px;
+    @keyframes pulse-subtle {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.02); }
     }
-
-    .bounce-subtle {
-      animation: bounceSubtle 2s infinite ease-in-out;
+    .animate-bounce-short {
+      animation: bounce 0.6s ease infinite alternate;
     }
-
-    @keyframes bounceSubtle {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-5px); }
+    @keyframes bounce {
+      from { transform: translateY(0); }
+      to { transform: translateY(-8px); }
     }
-
-    .card-spin {
-      animation: cardSpin 0.45s ease-out;
+    .spin-anim {
+      animation: spin 0.8s cubic-bezier(0.15, 0.85, 0.35, 1.2);
     }
-
-    @keyframes cardSpin {
-      0% { transform: scale(0.92) rotate(-2deg); opacity: 0.6; }
-      50% { transform: scale(1.03) rotate(1.5deg); }
-      100% { transform: scale(1) rotate(0deg); opacity: 1; }
-    }
-
-    ::-webkit-scrollbar {
-      width: 6px;
-    }
-    ::-webkit-scrollbar-track {
-      background: #FFF7ED;
-      border-radius: 10px;
-    }
-    ::-webkit-scrollbar-thumb {
-      background: #FDBA74;
-      border-radius: 10px;
+    @keyframes spin {
+      0% { transform: rotate(0deg) scale(0.8); opacity: 0.3; }
+      50% { transform: rotate(180deg) scale(1.1); opacity: 0.8; }
+      100% { transform: rotate(360deg) scale(1); opacity: 1; }
     }
   </style>
 </head>
-<body class="min-h-screen text-slate-800 flex flex-col justify-between pb-8">
+<body class="bg-slate-100 min-h-screen text-slate-800 font-sans flex flex-col items-center justify-between p-3 sm:p-6">
 
-  <header class="w-full max-w-md mx-auto pt-6 px-4 text-center">
-    <!-- Late Night Banner -->
-    <div id="late-night-banner" class="hidden mb-3 bg-indigo-900 text-indigo-100 px-4 py-2 rounded-2xl text-xs font-bold shadow-md border border-indigo-700 items-center justify-center gap-2">
-      <span class="text-amber-300">🌙 深夜宵夜模式已啟動</span>
-      <span class="text-indigo-200 font-normal">（已過 21:00，優先篩選深夜美食）</span>
-    </div>
-
-    <div class="inline-flex items-center gap-2 bg-amber-100 text-amber-800 px-4 py-1.5 rounded-full text-xs font-bold mb-2 shadow-sm border border-amber-200/80">
-      <i class="fa-solid fa-utensils text-orange-500"></i> 今晚不再為吃什麼糾結！
-    </div>
-    <h1 class="text-3xl font-black text-amber-950 tracking-tight flex items-center justify-center gap-2">
-      晚餐選擇障礙解答機 🍱
-    </h1>
-    <p class="text-slate-500 text-xs mt-1">選個心情、按個盲盒，命運秒速幫你決定！</p>
-  </header>
-
-  <main class="w-full max-w-md mx-auto px-4 my-auto py-3">
+  <!-- Top App Container -->
+  <div class="w-full max-w-md bg-white rounded-3xl shadow-xl overflow-hidden border border-slate-200 flex flex-col min-h-[640px]">
     
-    <!-- 3 Main Mode Navigation Tabs -->
-    <div class="flex bg-orange-100/80 p-1.5 rounded-2xl mb-4 border border-orange-200/70 shadow-inner text-xs font-bold">
-      <button id="tab-box" onclick="switchMode('box')" class="flex-1 py-2.5 rounded-xl transition-all duration-200 flex items-center justify-center gap-1 text-orange-950 bg-white shadow-sm">
-        <i class="fa-solid fa-gift text-orange-500"></i> 一鍵盲盒
-      </button>
-      <button id="tab-quiz" onclick="switchMode('quiz')" class="flex-1 py-2.5 rounded-xl transition-all duration-200 flex items-center justify-center gap-1 text-slate-600 hover:text-orange-950">
-        <i class="fa-solid fa-bolt text-amber-500"></i> 三秒快問
-      </button>
-      <button id="tab-menu" onclick="switchMode('menu')" class="flex-1 py-2.5 rounded-xl transition-all duration-200 flex items-center justify-center gap-1 text-slate-600 hover:text-orange-950">
-        <i class="fa-solid fa-book-open text-emerald-500"></i> 口袋菜單
-      </button>
-    </div>
-
-    <!-- VIEW 1: Blind Box Mode -->
-    <div id="view-box" class="space-y-3">
-      <div class="text-center py-2">
-        <div class="relative inline-block">
-          <div class="w-28 h-28 bg-gradient-to-tr from-amber-400 via-orange-400 to-rose-400 rounded-3xl mx-auto flex items-center justify-center shadow-lg border-4 border-white transform hover:scale-105 transition-transform">
-            <i id="box-icon" class="fa-solid fa-dice text-white text-5xl drop-shadow-md bounce-subtle"></i>
-          </div>
-          <div class="absolute -bottom-1 -right-2 bg-amber-300 text-amber-950 text-[11px] font-black px-2.5 py-0.5 rounded-full border-2 border-white shadow-sm">
-            純憑命運！
-          </div>
-        </div>
-      </div>
-
-      <p class="text-xs font-bold text-slate-400 uppercase tracking-wider text-center">👇 請選擇抽籤風格：</p>
-
-      <!-- 3 Specific Random Buttons -->
-      <div class="grid grid-cols-1 gap-2.5">
-        <!-- Main General Random -->
-        <button onclick="drawRandom('all')" class="w-full bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white font-black py-3.5 px-4 rounded-2xl shadow-cute active:shadow-cute-pressed active:translate-y-1 transition-all border border-orange-600/30 flex items-center justify-between">
-          <span class="flex items-center gap-2.5 text-base">
-            <i class="fa-solid fa-shuffle text-amber-200 text-lg"></i>
-            <span>隨機大亂鬥 (全選單)</span>
-          </span>
-          <i class="fa-solid fa-chevron-right text-xs opacity-70"></i>
-        </button>
-
-        <!-- Treat Myself Random -->
-        <button onclick="drawRandom('treat')" class="w-full bg-gradient-to-r from-rose-500 to-pink-500 hover:from-rose-600 hover:to-pink-600 text-white font-black py-3.5 px-4 rounded-2xl shadow-cute active:shadow-cute-pressed active:translate-y-1 transition-all border border-rose-600/30 flex items-center justify-between">
-          <div class="text-left">
-            <div class="flex items-center gap-2 text-base">
-              <i class="fa-solid fa-drumstick-bite text-rose-200 text-lg"></i>
-              <span>🥩 想吃好點隨機抽</span>
-            </div>
-            <div class="text-[11px] text-rose-100 font-normal mt-0.5">炸雞、火鍋、燒肉、披薩、定食舒壓美味</div>
-          </div>
-          <i class="fa-solid fa-chevron-right text-xs opacity-70"></i>
-        </button>
-
-        <!-- Budget / Quick Meal Random -->
-        <button onclick="drawRandom('budget')" class="w-full bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-700 hover:to-teal-600 text-white font-black py-3.5 px-4 rounded-2xl shadow-cute active:shadow-cute-pressed active:translate-y-1 transition-all border border-emerald-700/30 flex items-center justify-between">
-          <div class="text-left">
-            <div class="flex items-center gap-2 text-base">
-              <i class="fa-solid fa-bowl-rice text-emerald-200 text-lg"></i>
-              <span>🍱 簡單吃飽隨機抽</span>
-            </div>
-            <div class="text-[11px] text-emerald-100 font-normal mt-0.5">便當、滷肉飯、乾麵水餃、超商快速平價</div>
-          </div>
-          <i class="fa-solid fa-chevron-right text-xs opacity-70"></i>
-        </button>
+    <!-- Header Area -->
+    <div class="bg-gradient-to-r from-amber-500 to-orange-500 p-5 text-white text-center relative shadow-md">
+      <h1 class="text-2xl font-black tracking-wide flex items-center justify-center gap-2">
+        <span>🍱</span> 晚餐選擇障礙解答機
+      </h1>
+      <p class="text-xs text-amber-100 mt-1 opacity-90">專治晚餐糾結症 • 命運指派不許不服</p>
+      
+      <!-- Live Sync Badge -->
+      <div id="syncBadge" class="mt-3 inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs bg-black/20 backdrop-blur-sm border border-white/20 text-white">
+        <i class="fa-solid fa-circle-notch fa-spin text-amber-200"></i>
+        <span>正同步 Google 試算表...</span>
       </div>
     </div>
 
-    <!-- VIEW 2: Quick Quiz Mode -->
-    <div id="view-quiz" class="hidden space-y-4">
-      <!-- Step 1: Vibe -->
-      <div class="bg-white rounded-2xl p-4 border border-orange-100 shadow-sm">
-        <label class="block text-xs font-bold text-slate-500 mb-2">1. 今天的心情與狀態？</label>
-        <div class="grid grid-cols-3 gap-2 text-xs font-bold">
-          <button onclick="selectQuiz('vibe', 'tired')" id="q-vibe-tired" class="quiz-btn py-2.5 px-2 rounded-xl border border-slate-200 text-slate-700 bg-slate-50 hover:bg-orange-50">😫 好累想犒賞</button>
-          <button onclick="selectQuiz('vibe', 'quick')" id="q-vibe-quick" class="quiz-btn py-2.5 px-2 rounded-xl border border-slate-200 text-slate-700 bg-slate-50 hover:bg-orange-50">⚡ 快速吃飽</button>
-          <button onclick="selectQuiz('vibe', 'light')" id="q-vibe-light" class="quiz-btn py-2.5 px-2 rounded-xl border border-slate-200 text-slate-700 bg-slate-50 hover:bg-orange-50">🥗 清爽低負擔</button>
-        </div>
-      </div>
-
-      <!-- Step 2: Warmth -->
-      <div class="bg-white rounded-2xl p-4 border border-orange-100 shadow-sm">
-        <label class="block text-xs font-bold text-slate-500 mb-2">2. 口感與溫度喜好？</label>
-        <div class="grid grid-cols-3 gap-2 text-xs font-bold">
-          <button onclick="selectQuiz('warmth', 'soup')" id="q-warmth-soup" class="quiz-btn py-2.5 px-2 rounded-xl border border-slate-200 text-slate-700 bg-slate-50 hover:bg-orange-50">🍜 想喝熱湯</button>
-          <button onclick="selectQuiz('warmth', 'heavy')" id="q-warmth-heavy" class="quiz-btn py-2.5 px-2 rounded-xl border border-slate-200 text-slate-700 bg-slate-50 hover:bg-orange-50">🔥 重口味舒壓</button>
-          <button onclick="selectQuiz('warmth', 'any')" id="q-warmth-any" class="quiz-btn py-2.5 px-2 rounded-xl border border-slate-200 text-slate-700 bg-slate-50 hover:bg-orange-50">✨ 都可不限</button>
-        </div>
-      </div>
-
-      <!-- Step 3: Budget -->
-      <div class="bg-white rounded-2xl p-4 border border-orange-100 shadow-sm">
-        <label class="block text-xs font-bold text-slate-500 mb-2">3. 預算範圍？</label>
-        <div class="grid grid-cols-2 gap-2 text-xs font-bold">
-          <button onclick="selectQuiz('budget', 'budget')" id="q-budget-budget" class="quiz-btn py-2.5 px-2 rounded-xl border border-slate-200 text-slate-700 bg-slate-50 hover:bg-orange-50">💵 平價便當小吃 ($130內)</button>
-          <button onclick="selectQuiz('budget', 'treat')" id="q-budget-treat" class="quiz-btn py-2.5 px-2 rounded-xl border border-slate-200 text-slate-700 bg-slate-50 hover:bg-orange-50">💎 豪華痛快大餐 ($150+)</button>
-        </div>
-      </div>
-
-      <button onclick="submitQuiz()" class="w-full bg-slate-800 hover:bg-slate-900 text-white font-black py-3.5 px-4 rounded-2xl shadow-md transition-all text-sm flex items-center justify-center gap-2">
-        <i class="fa-solid fa-wand-magic-sparkles text-amber-400"></i> 生成專屬指派結果
+    <!-- Navigation Tabs -->
+    <div class="flex border-b border-slate-200 bg-slate-50 text-sm font-bold">
+      <button id="tabPickerBtn" onclick="switchTab('picker')" class="flex-1 py-3 text-center border-b-2 border-orange-500 text-orange-600 transition-all flex items-center justify-center gap-2">
+        <i class="fa-solid fa-dice"></i> 命運盲盒
+      </button>
+      <button id="tabPocketBtn" onclick="switchTab('pocket')" class="flex-1 py-3 text-center border-b-2 border-transparent text-slate-400 hover:text-slate-600 transition-all flex items-center justify-center gap-2">
+        <i class="fa-solid fa-list-check"></i> 口袋名單 (<span id="menuCount">25</span>)
       </button>
     </div>
 
-    <!-- VIEW 3: Pocket Menu Management -->
-    <div id="view-menu" class="hidden space-y-4">
-      <div class="bg-white rounded-2xl p-4 border border-orange-100 shadow-sm">
-        <h3 class="font-bold text-sm text-slate-800 mb-2 flex items-center justify-between">
-          <span>➕ 新增自訂菜單選項</span>
-          <span id="custom-count-badge" class="text-[10px] bg-orange-100 text-orange-800 px-2 py-0.5 rounded-full">已載入</span>
-        </h3>
-        <div class="space-y-2">
-          <input type="text" id="add-name" placeholder="食物名稱 (例如: 巷口火鍋 / 鹹酥雞)" class="w-full text-xs p-2.5 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-400">
+    <!-- MAIN TAB 1: 命運盲盒 -->
+    <div id="tabPicker" class="p-5 flex-1 flex flex-col justify-between">
+      
+      <!-- Random Buttons Section -->
+      <div>
+        <p class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 text-center">請選擇你的今晚心境</p>
+        <div class="grid grid-cols-2 gap-2 mb-3">
+          <button onclick="pickDinner('想吃好點')" class="bg-gradient-to-r from-rose-500 to-pink-600 hover:from-rose-600 hover:to-pink-700 text-white p-3 rounded-2xl shadow-md font-bold text-sm flex items-center justify-center gap-1.5 transition active:scale-95">
+            <span>🥩</span> 想吃好點 (犒賞)
+          </button>
+          <button onclick="pickDinner('簡單吃飽')" class="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white p-3 rounded-2xl shadow-md font-bold text-sm flex items-center justify-center gap-1.5 transition active:scale-95">
+            <span>🍱</span> 簡單吃飽 (平價)
+          </button>
+        </div>
+        <button onclick="pickDinner('ALL')" class="w-full bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white p-3.5 rounded-2xl shadow-lg font-black text-base flex items-center justify-center gap-2 transition active:scale-98">
+          <i class="fa-solid fa-shuffle"></i> 命運隨機盲盒 (不限風格)
+        </button>
+      </div>
+
+      <!-- Result Display Card -->
+      <div id="resultBox" class="my-4 p-5 rounded-3xl bg-slate-50 border-2 border-dashed border-slate-200 text-center flex flex-col items-center justify-center min-h-[220px] transition-all relative overflow-hidden">
+        <div id="placeholderState" class="text-slate-400">
+          <div class="text-5xl mb-2 opacity-60">🔮</div>
+          <p class="text-sm font-medium">點擊上方按鈕，讓命運幫你做決定！</p>
+        </div>
+
+        <div id="resultContent" class="hidden w-full flex flex-col items-center">
+          <div id="foodEmoji" class="text-6xl mb-2 spin-anim">🍱</div>
+          <h2 id="foodName" class="text-2xl font-black text-slate-800 mb-2">牛肉麵</h2>
           
-          <div class="grid grid-cols-2 gap-2">
-            <select id="add-type" class="text-xs p-2.5 border border-slate-200 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-orange-400">
-              <option value="treat">🥩 想吃好點 (高單價/豐富)</option>
-              <option value="budget">🍱 簡單吃飽 (平價/便當)</option>
-            </select>
-            <input type="text" id="add-emoji" placeholder="Emoji 圖示 (例如: 🍕)" class="text-xs p-2.5 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-400">
+          <!-- Badges -->
+          <div id="foodBadges" class="flex flex-wrap gap-1.5 justify-center mb-3">
+            <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-100 text-amber-800">想吃好點</span>
           </div>
 
-          <input type="text" id="add-note" placeholder="完美搭檔建議 (例如: 切豬耳朵、白飯換泡麵)" class="w-full text-xs p-2.5 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-400">
+          <!-- Side Note -->
+          <p id="foodNote" class="text-xs text-slate-500 italic bg-white px-3 py-1.5 rounded-xl border border-slate-200 mb-2 max-w-xs">
+            "記得加酸菜與一盤小菜犒賞自己！"
+          </p>
 
-          <button onclick="addCustomFood()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 rounded-xl text-xs transition-colors">
-            加入口袋選單
+          <!-- Punchline -->
+          <p id="foodPunchline" class="text-xs font-bold text-orange-600 bg-orange-50 px-3 py-1.5 rounded-xl border border-orange-200 max-w-xs">
+            👉 別想了，今天的煩惱喝湯就解決了一半！
+          </p>
+        </div>
+      </div>
+
+      <!-- Controls & Limits -->
+      <div class="space-y-2">
+        <div class="flex items-center justify-between text-xs text-slate-500 px-1 font-medium">
+          <span>決策鎖定機制：</span>
+          <span>今日換選機會：<strong id="chanceCount" class="text-orange-600 text-sm font-black">2</strong> / 2 次</span>
+        </div>
+
+        <button id="rerollBtn" onclick="rerollDinner()" disabled class="w-full bg-slate-200 text-slate-400 py-3 rounded-2xl font-bold text-sm flex items-center justify-center gap-2 transition cursor-not-allowed">
+          <i class="fa-solid fa-rotate-right"></i> 不滿意？換一個 (<span id="rerollText">剩 2 次</span>)
+        </button>
+      </div>
+
+    </div>
+
+    <!-- MAIN TAB 2: 口袋名單 & Google 試算表串接 -->
+    <div id="tabPocket" class="p-5 flex-1 hidden flex-col justify-between overflow-y-auto max-h-[500px]">
+      
+      <!-- Sheets Sync Box -->
+      <div class="bg-amber-50 border border-amber-200 p-4 rounded-2xl mb-4">
+        <div class="flex items-center justify-between mb-2">
+          <h3 class="text-xs font-black text-amber-900 flex items-center gap-1.5">
+            <i class="fa-solid fa-file-csv text-amber-600"></i> Google 試算表串接
+          </h3>
+          <span id="syncStatusTag" class="text-[10px] bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full font-bold">自動連線中</span>
+        </div>
+        <p class="text-xs text-amber-700 mb-2 leading-relaxed">
+          系統會自動從你的 Google 試算表同步菜單。也可以在下方手動更新 CSV 網址：
+        </p>
+        <div class="flex gap-2">
+          <input type="text" id="csvUrlInput" class="flex-1 text-xs p-2 rounded-xl border border-amber-300 focus:outline-none focus:ring-2 focus:ring-amber-500 bg-white" placeholder="https://docs.google.com/spreadsheets/.../pub?output=csv">
+          <button onclick="manualSyncCSV()" class="bg-amber-600 hover:bg-amber-700 text-white px-3 py-2 rounded-xl text-xs font-bold transition whitespace-nowrap">
+            同步
           </button>
         </div>
       </div>
 
-      <!-- Meal Database List -->
-      <div class="bg-white rounded-2xl p-4 border border-orange-100 shadow-sm">
-        <div class="flex justify-between items-center mb-3">
-          <h3 class="font-bold text-sm text-slate-800">📋 目前選單項目</h3>
-          <button onclick="restoreDefaultDatabase()" class="text-[11px] text-slate-400 hover:text-orange-600">重置回預設</button>
-        </div>
-        <div id="pocket-menu-list" class="space-y-2 max-h-60 overflow-y-auto pr-1">
-          <!-- Items populated via JS -->
-        </div>
-      </div>
-    </div>
-
-    <!-- RESULT CARD (Shown after drawing) -->
-    <div id="result-card" class="hidden mt-4 bg-white rounded-3xl p-5 border-2 border-orange-200 shadow-card text-center relative overflow-hidden">
-      <div id="result-badge" class="inline-block bg-orange-100 text-orange-800 text-[11px] font-bold px-3 py-1 rounded-full mb-2">
-        🎯 命運為你選擇了
-      </div>
-
-      <div id="result-emoji" class="text-5xl mb-1">🍜</div>
-      <h2 id="result-title" class="text-2xl font-black text-slate-800 mb-2">牛肉麵 / 乾拌麵</h2>
-
-      <div class="bg-amber-50/80 rounded-2xl p-3 border border-amber-200/70 mb-3 text-left">
-        <div class="text-[11px] font-bold text-amber-800 mb-0.5 flex items-center gap-1">
-          <i class="fa-solid fa-lightbulb text-amber-500"></i> 完美搭檔建議：
-        </div>
-        <p id="result-note" class="text-xs text-amber-950/80 leading-relaxed">酸菜加爆，順便切一盤花麩與豬耳朵！</p>
-      </div>
-
-      <div class="bg-gradient-to-r from-orange-500 to-amber-500 text-white rounded-2xl p-3.5 mb-4 shadow-sm text-center relative">
-        <p id="result-punchline" class="text-xs font-bold leading-snug px-2">
-          別想了，熱湯喝下去，今天的煩惱就解決了一半！
-        </p>
-      </div>
-
-      <div class="flex items-center gap-2">
-        <button id="btn-reroll" onclick="reroll()" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-3 px-3 rounded-xl text-xs transition-all border border-slate-300 flex items-center justify-center gap-1">
-          <i class="fa-solid fa-arrows-rotate"></i>
-          <span>換一個 (<span id="reroll-count">剩 3 次</span>)</span>
-        </button>
-        <button onclick="acceptDecision()" class="bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-3 px-4 rounded-xl text-xs transition-all shadow-sm flex items-center justify-center gap-1">
-          <i class="fa-solid fa-check"></i> 就吃這個！
-        </button>
-      </div>
-    </div>
-
-    <!-- Bottom Actions Bar -->
-    <div class="mt-6 pt-3 border-t border-orange-200/60 flex items-center justify-between text-xs text-slate-500 px-1">
-      <button onclick="toggleHistoryModal(true)" class="hover:text-orange-600 flex items-center gap-1 font-bold transition-colors">
-        <i class="fa-solid fa-clock-rotate-left"></i> 最近吃過 (<span id="history-count">0</span>)
-      </button>
-      <button onclick="resetDecisionState()" class="hover:text-rose-600 flex items-center gap-1 transition-colors">
-        <i class="fa-solid fa-rotate"></i> 重置決策次數
-      </button>
-    </div>
-
-  </main>
-
-  <!-- History Modal -->
-  <div id="history-modal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-    <div class="bg-white rounded-3xl w-full max-w-sm p-5 shadow-2xl border border-orange-100">
-      <div class="flex justify-between items-center mb-3 pb-2 border-b border-slate-100">
-        <h3 class="font-bold text-slate-800 text-sm flex items-center gap-2">
-          <i class="fa-solid fa-bowl-food text-orange-500"></i> 最近 3 次的晚餐紀錄
+      <!-- Add Custom Item Form -->
+      <div class="bg-slate-50 p-3.5 rounded-2xl border border-slate-200 mb-4">
+        <h3 class="text-xs font-bold text-slate-600 mb-2 flex items-center gap-1">
+          <i class="fa-solid fa-plus-circle"></i> 手動新增暫存品項
         </h3>
-        <button onclick="toggleHistoryModal(false)" class="text-slate-400 hover:text-slate-600 text-lg w-7 h-7 rounded-full flex items-center justify-center bg-slate-100">
-          &times;
+        <div class="grid grid-cols-3 gap-2 mb-2">
+          <input type="text" id="addEmoji" class="col-span-1 p-2 border rounded-xl text-xs text-center" placeholder="圖示 (🍱)">
+          <input type="text" id="addName" class="col-span-2 p-2 border rounded-xl text-xs" placeholder="食物名稱 (例: 肉圓)">
+        </div>
+        <div class="grid grid-cols-2 gap-2 mb-2">
+          <select id="addCategory" class="p-2 border rounded-xl text-xs bg-white">
+            <option value="簡單吃飽">簡單吃飽 (平價)</option>
+            <option value="想吃好點">想吃好點 (犒賞)</option>
+          </select>
+          <input type="text" id="addNote" class="p-2 border rounded-xl text-xs" placeholder="備註 (例: 加辣最好吃)">
+        </div>
+        <button onclick="addCustomItem()" class="w-full bg-slate-800 hover:bg-slate-900 text-white p-2 rounded-xl text-xs font-bold transition">
+          加入本機清單
         </button>
       </div>
 
-      <p class="text-[11px] text-slate-400 mb-3">紀錄中的項目會在隨機抽籤時暫時冷卻，避免連續吃到重複種類！</p>
-
-      <ul id="history-list" class="space-y-2 mb-4">
-        <!-- History JS population -->
-      </ul>
-
-      <div class="flex gap-2">
-        <button onclick="clearHistory()" class="flex-1 bg-rose-50 text-rose-600 hover:bg-rose-100 font-bold py-2.5 rounded-xl text-xs transition-colors border border-rose-200">
-          清空冷卻
-        </button>
-        <button onclick="toggleHistoryModal(false)" class="flex-1 bg-slate-800 text-white font-bold py-2.5 rounded-xl text-xs transition-colors">
-          關閉
-        </button>
+      <!-- Pocket List -->
+      <div class="flex-1">
+        <h3 class="text-xs font-bold text-slate-400 mb-2 flex items-center justify-between">
+          <span>目前菜單列表</span>
+          <button onclick="resetDefaultMenu()" class="text-[10px] text-slate-400 hover:text-red-500 underline">重置預設檔</button>
+        </h3>
+        <div id="pocketList" class="space-y-2">
+          <!-- Items inserted via JS -->
+        </div>
       </div>
+
     </div>
+
+    <!-- Footer -->
+    <div class="bg-slate-50 border-t border-slate-200 p-3 text-center text-[11px] text-slate-400">
+      晚餐選擇障礙解答機 • 專治猶豫不決
+    </div>
+
   </div>
 
-  <footer class="text-center text-xs text-slate-400 mt-4">
-    <p>晚餐選擇障礙解答機 ‧ 治癒你的每一個用餐猶豫 moment ✨</p>
-  </footer>
-
   <script>
-    // Default Preset Database
-    const DEFAULT_FOODS = [
-      // 「想吃好點」選項 (Treat Myself / Premium / High-Calorie / Comfort Food)
-      { id: "f_01", name: "韓式炸雞 / 美式漢堡", type: "treat", emoji: "🍗", moods: ["tired", "late"], isSoup: false, note: "快樂水 (可樂) 一定要點大杯去冰！", punchline: "卡路里什麼的明天再說，今天你需要這個酷東西！" },
-      { id: "f_02", name: "個人小火鍋 / 麻辣燙", type: "treat", emoji: "🍲", moods: ["tired", "soup", "late"], isSoup: true, note: "飯換王子麵，沙茶醬區蒜泥加滿。", punchline: "熱湯喝下去，今天的煩惱就解決了一半！" },
-      { id: "f_03", name: "日式拉麵 / 豚骨濃湯", type: "treat", emoji: "🍜", moods: ["tired", "soup"], isSoup: true, note: "湯頭選濃郁、麵條選硬，加一顆溏心蛋！", punchline: "去店裡好好享用一碗拉麵，儀式感拉滿。" },
-      { id: "f_04", name: "義式披薩 / 焗烤麵", type: "treat", emoji: "🍕", moods: ["tired"], isSoup: false, note: "起司加倍，搭配香濃酥脆的蒜味麵包。", punchline: "快樂的熱量來源，今天辛苦了值得犒賞自己！" },
-      { id: "f_05", name: "日式燒肉飯 / 牛排定食", type: "treat", emoji: "🥩", moods: ["tired"], isSoup: false, note: "白飯淋醬，熟度五分熟最軟嫩！", punchline: "大口吃肉，把今天的疲憊通通補回來！" },
-      { id: "f_06", name: "韓式石鍋拌飯 / 部隊鍋", type: "treat", emoji: "🥘", moods: ["tired", "soup"], isSoup: true, note: "鍋巴稍微放久一點更香脆！", punchline: "酸辣開胃，一口接一口根本停不下來。" },
+    // 預設完整的 CSV 網址（已整合使用者提供之發布網址）
+    const DEFAULT_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTNSwBI_qGNOjnE6yKY28ohuvqhc2RkA5p333vMqlT47G3jsR9mGVQVqFVoE0WL-g1VHfwba_6RLo82/pub?output=csv";
 
-      // 「簡單吃飽」選項 (Budget / Everyday Meals)
-      { id: "f_07", name: "燒肉便當 / 排骨便當", type: "budget", emoji: "🍱", moods: ["quick"], isSoup: false, note: "主菜選雙拼，一定要加點一顆滷蛋！", punchline: "別想了，台式便當永遠是你的靈魂歸宿。" },
-      { id: "f_08", name: "牛肉麵 / 乾拌麵", type: "budget", emoji: "🍜", moods: ["quick", "soup"], isSoup: true, note: "酸菜加爆，順便切一盤花麩與豬耳朵！", punchline: "經典美味快速搞定，滿足感爆棚。" },
-      { id: "f_09", name: "滷肉飯 + 貢丸湯 + 燙青菜", type: "budget", emoji: "🍚", moods: ["quick", "soup"], isSoup: true, note: "飯淋汁多一點，加點一顆半熟荷包蛋。", punchline: "經典台式小吃，百元內快速飽足的神！" },
-      { id: "f_10", name: "水餃 10 顆 + 酸辣湯", type: "budget", emoji: "🥟", moods: ["quick", "soup"], isSoup: true, note: "醬油加點白醋跟蒜泥最對味。", punchline: "十分鐘搞定，簡單乾淨又飽足。" },
-      { id: "f_11", name: "台式鐵板燒 (牛肉/豬肉)", type: "budget", emoji: "🍳", moods: ["quick"], isSoup: false, note: "豆芽菜與高麗菜交代炒小辣！", punchline: "現炒香氣十足，白飯可以多吃兩碗。" },
-      { id: "f_12", name: "健康餐盒 / 舒肥雞胸飯", type: "budget", emoji: "🥗", moods: ["light", "quick"], isSoup: false, note: "醬料選紫蘇梅或胡麻，補充分爽纖維。", punchline: "給腸胃放個假，明天起來神清氣爽無負擔。" },
-      { id: "f_13", name: "熱滷味 / 鹹酥雞攤", type: "budget", emoji: "🍢", moods: ["late", "quick"], isSoup: false, note: "九層塔與蒜碎是本體，甜不辣炸到酥脆。", punchline: "深夜肚子咕嚕叫，這就是最直接的救贖！" }
+    // 預設後備資料（當網路斷線時備用）
+    const FALLBACK_MENU = [
+      { id: "001", name: "燒肉便當 / 排骨飯", category: "簡單吃飽", emoji: "🍱", temp: "乾食", flavor: "經典台式", lateNight: false, rainy: true, tags: ["便當", "經典"], note: "排骨加辣更夠味！", punchline: "別想了，台式便當永遠是你的靈魂歸宿。" },
+      { id: "002", name: "牛肉麵", category: "想吃好點", emoji: "🥩", temp: "熱湯水", flavor: "重口味舒壓", lateNight: false, rainy: true, tags: ["湯麵", "重口味"], note: "酸菜加滿配花麩！", punchline: "熱湯喝下去，今天的煩惱就解決了一半。" },
+      { id: "003", name: "健康餐盒", category: "想吃好點", emoji: "🍳", temp: "乾食", flavor: "清爽負擔低", lateNight: false, rainy: true, tags: ["清爽", "高蛋白"], note: "舒肥雞胸配紫米飯", punchline: "給腸胃放個假，明天起來神清氣爽。" },
+      { id: "004", name: "鹹酥雞", category: "想吃好點", emoji: "🍗", temp: "乾食", flavor: "罪惡滿點", lateNight: true, rainy: true, tags: ["罪惡", "宵夜"], note: "九層塔與蒜碎加爆！", punchline: "卡路里什麼的明天再說，今天你需要這個酷東西。" },
+      { id: "005", name: "個人小火鍋", category: "想吃好點", emoji: "🍲", temp: "熱湯水", flavor: "重口味舒壓", lateNight: true, rainy: false, tags: ["暖胃", "豐富"], note: "醬料區蒜泥加滿", punchline: "天氣這麼冷，不吃火鍋對得起自己嗎？" },
+      { id: "006", name: "鹹水雞", category: "簡單吃飽", emoji: "🐔", temp: "乾食", flavor: "清爽負擔低", lateNight: true, rainy: true, tags: ["清爽", "宵夜"], note: "加筍片與花椰菜", punchline: "清爽無負擔，宵夜首選。" },
+      { id: "007", name: "便利商店茶葉蛋 + 地瓜 + 蛋白飲", category: "懲罰", emoji: "🥚", temp: "乾食", flavor: "清爽負擔低", lateNight: true, rainy: true, tags: ["懲罰套餐"], note: "猶豫太久的懲罰套餐", punchline: "你已經換太多次了！請接受超商組合作為猶豫不決的懲罰！" }
     ];
 
-    // Penalty Meal when limit reached
-    const PENALTY_MEAL = {
-      id: "penalty",
-      name: "超商茶葉蛋 + 地瓜 + 蛋白飲",
-      emoji: "🥚",
-      note: "猶豫太久的懲罰套餐！健康省錢又快速。",
-      punchline: "你已經猶豫換太多次了！命運強制指派超商組合，不許再挑了！"
-    };
+    // State Variables
+    let currentMenu = [];
+    let rerollChances = 2;
+    let lastFilter = 'ALL';
+    let currentSelectedItem = null;
 
-    // Global State
-    let foodsDB = [];
-    let historyList = [];
-    let remainingRerolls = 3;
-    let currentCategoryFilter = 'all'; // 'all' | 'treat' | 'budget'
-    let currentPickedFoodIndex = -1;
-    let quizState = { vibe: 'tired', warmth: 'any', budget: 'budget' };
+    // Initialization
+    window.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('csvUrlInput').value = localStorage.getItem('dinner_csv_url') || DEFAULT_CSV_URL;
+      loadSavedMenu();
+      syncGoogleSheets(document.getElementById('csvUrlInput').value);
+    });
 
-    window.onload = function() {
-      loadDatabase();
-      loadHistory();
-      checkLateNightMode();
-      renderPocketMenuList();
-      updateHistoryUI();
-    };
+    // Tab Switcher
+    function switchTab(tab) {
+      const picker = document.getElementById('tabPicker');
+      const pocket = document.getElementById('tabPocket');
+      const pBtn = document.getElementById('tabPickerBtn');
+      const kBtn = document.getElementById('tabPocketBtn');
 
-    function checkLateNightMode() {
-      const hour = new Date().getHours();
-      // Late night if after 21:00 or before 05:00
-      if (hour >= 21 || hour < 5) {
-        document.getElementById('late-night-banner').classList.remove('hidden');
-        document.getElementById('late-night-banner').classList.add('flex');
+      if (tab === 'picker') {
+        picker.classList.remove('hidden');
+        pocket.classList.add('hidden');
+        pocket.classList.remove('flex');
+        pBtn.className = "flex-1 py-3 text-center border-b-2 border-orange-500 text-orange-600 transition-all flex items-center justify-center gap-2 font-bold";
+        kBtn.className = "flex-1 py-3 text-center border-b-2 border-transparent text-slate-400 hover:text-slate-600 transition-all flex items-center justify-center gap-2 font-bold";
+      } else {
+        pocket.classList.remove('hidden');
+        pocket.classList.add('flex');
+        picker.classList.add('hidden');
+        kBtn.className = "flex-1 py-3 text-center border-b-2 border-orange-500 text-orange-600 transition-all flex items-center justify-center gap-2 font-bold";
+        pBtn.className = "flex-1 py-3 text-center border-b-2 border-transparent text-slate-400 hover:text-slate-600 transition-all flex items-center justify-center gap-2 font-bold";
+        renderPocketList();
       }
     }
 
-    function loadDatabase() {
+    // Google Sheets CSV Sync
+    async function syncGoogleSheets(url) {
+      const badge = document.getElementById('syncBadge');
+      const tag = document.getElementById('syncStatusTag');
+      badge.innerHTML = `<i class="fa-solid fa-circle-notch fa-spin text-amber-200"></i> <span>同步中...</span>`;
+
       try {
-        const stored = localStorage.getItem('dinner_foods_db');
-        if (stored) {
-          foodsDB = JSON.parse(stored);
+        const response = await fetch(url);
+        if (!response.ok) throw new Error("HTTP error " + response.status);
+        const csvText = await response.text();
+        const parsedData = parseCSV(csvText);
+
+        if (parsedData.length > 0) {
+          currentMenu = parsedData;
+          localStorage.setItem('dinner_custom_menu', JSON.stringify(currentMenu));
+          localStorage.setItem('dinner_csv_url', url);
+          
+          badge.innerHTML = `<i class="fa-solid fa-check text-emerald-300"></i> <span>已同步 ${currentMenu.length} 項 Google 菜單</span>`;
+          tag.innerText = `已連結 ${currentMenu.length} 項`;
+          tag.className = "text-[10px] bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full font-bold";
         } else {
-          foodsDB = [...DEFAULT_FOODS];
-          saveDatabase();
+          throw new Error("無效的 CSV 內容");
         }
-      } catch (e) {
-        foodsDB = [...DEFAULT_FOODS];
-      }
-    }
-
-    function saveDatabase() {
-      try {
-        localStorage.setItem('dinner_foods_db', JSON.stringify(foodsDB));
-      } catch (e) {
-        console.error("Save db error", e);
-      }
-    }
-
-    function restoreDefaultDatabase() {
-      if (confirm("確定要重置所有菜單項目回預設值嗎？")) {
-        foodsDB = [...DEFAULT_FOODS];
-        saveDatabase();
-        renderPocketMenuList();
-        alert("已恢復預設菜單！");
-      }
-    }
-
-    function switchMode(mode) {
-      const boxBtn = document.getElementById('tab-box');
-      const quizBtn = document.getElementById('tab-quiz');
-      const menuBtn = document.getElementById('tab-menu');
-
-      const boxView = document.getElementById('view-box');
-      const quizView = document.getElementById('view-quiz');
-      const menuView = document.getElementById('view-menu');
-
-      [boxView, quizView, menuView].forEach(v => v.classList.add('hidden'));
-
-      boxBtn.className = "flex-1 py-2.5 rounded-xl transition-all duration-200 flex items-center justify-center gap-1 text-slate-600 hover:text-orange-950";
-      quizBtn.className = "flex-1 py-2.5 rounded-xl transition-all duration-200 flex items-center justify-center gap-1 text-slate-600 hover:text-orange-950";
-      menuBtn.className = "flex-1 py-2.5 rounded-xl transition-all duration-200 flex items-center justify-center gap-1 text-slate-600 hover:text-orange-950";
-
-      if (mode === 'box') {
-        boxBtn.className = "flex-1 py-2.5 rounded-xl transition-all duration-200 flex items-center justify-center gap-1 text-orange-950 bg-white shadow-sm";
-        boxView.classList.remove('hidden');
-      } else if (mode === 'quiz') {
-        quizBtn.className = "flex-1 py-2.5 rounded-xl transition-all duration-200 flex items-center justify-center gap-1 text-orange-950 bg-white shadow-sm";
-        quizView.classList.remove('hidden');
-      } else if (mode === 'menu') {
-        menuBtn.className = "flex-1 py-2.5 rounded-xl transition-all duration-200 flex items-center justify-center gap-1 text-orange-950 bg-white shadow-sm";
-        menuView.classList.remove('hidden');
-      }
-    }
-
-    function getCandidateFoods(category = 'all') {
-      const historyIds = historyList.map(h => h.id);
-      let candidates = foodsDB.filter(f => !historyIds.includes(f.id));
-
-      if (candidates.length === 0) candidates = [...foodsDB];
-
-      if (category === 'treat') {
-        const treatList = candidates.filter(f => f.type === 'treat');
-        return treatList.length > 0 ? treatList : candidates;
-      } else if (category === 'budget') {
-        const budgetList = candidates.filter(f => f.type === 'budget');
-        return budgetList.length > 0 ? budgetList : candidates;
+      } catch (err) {
+        console.warn("Google Sheets Sync fallback:", err);
+        badge.innerHTML = `<i class="fa-solid fa-triangle-exclamation text-amber-300"></i> <span>讀取本機預設選單</span>`;
+        tag.innerText = "本機模式";
+        tag.className = "text-[10px] bg-slate-200 text-slate-600 px-2 py-0.5 rounded-full font-bold";
       }
 
-      return candidates;
+      document.getElementById('menuCount').innerText = currentMenu.length;
+      renderPocketList();
     }
 
-    function drawRandom(category = 'all') {
-      currentCategoryFilter = category;
-      const icon = document.getElementById('box-icon');
-      icon.classList.add('fa-spin');
-
-      setTimeout(() => {
-        icon.classList.remove('fa-spin');
-        const available = getCandidateFoods(category);
-        const picked = available[Math.floor(Math.random() * available.length)];
-        displayResult(picked, false);
-      }, 300);
+    function manualSyncCSV() {
+      const url = document.getElementById('csvUrlInput').value.trim();
+      if (url) syncGoogleSheets(url);
     }
 
-    function selectQuiz(field, value) {
-      quizState[field] = value;
-      // Update UI state for buttons
-      document.querySelectorAll(`[id^="q-${field}-"]`).forEach(btn => {
-        btn.className = "quiz-btn py-2.5 px-2 rounded-xl border border-slate-200 text-slate-700 bg-slate-50 hover:bg-orange-50";
-      });
-      const selectedBtn = document.getElementById(`q-${field}-${value}`);
-      if (selectedBtn) {
-        selectedBtn.className = "quiz-btn py-2.5 px-2 rounded-xl border-2 border-orange-500 text-orange-950 bg-orange-100/80 font-black";
-      }
-    }
+    // CSV Parser supporting standard 9 columns
+    function parseCSV(text) {
+      const lines = text.trim().split(/\r?\n/);
+      if (lines.length < 2) return [];
 
-    function submitQuiz() {
-      let candidates = [...foodsDB];
-
-      // Filter by warmth / soup
-      if (quizState.warmth === 'soup') {
-        const soupOnly = candidates.filter(f => f.isSoup);
-        if (soupOnly.length > 0) candidates = soupOnly;
-      }
-
-      // Filter by budget / type
-      if (quizState.budget === 'treat') {
-        const treatOnly = candidates.filter(f => f.type === 'treat');
-        if (treatOnly.length > 0) candidates = treatOnly;
-      } else if (quizState.budget === 'budget') {
-        const budgetOnly = candidates.filter(f => f.type === 'budget');
-        if (budgetOnly.length > 0) candidates = budgetOnly;
-      }
-
-      const picked = candidates[Math.floor(Math.random() * candidates.length)];
-      displayResult(picked, false);
-    }
-
-    function displayResult(food, isPenalty = false) {
-      const resultCard = document.getElementById('result-card');
-      const badge = document.getElementById('result-badge');
-      const emoji = document.getElementById('result-emoji');
-      const title = document.getElementById('result-title');
-      const note = document.getElementById('result-note');
-      const punchline = document.getElementById('result-punchline');
-      const rerollBtn = document.getElementById('btn-reroll');
-      const rerollCountSpan = document.getElementById('reroll-count');
-
-      resultCard.classList.remove('card-spin');
-      void resultCard.offsetWidth; // Reflow
-      resultCard.classList.add('card-spin');
-      resultCard.classList.remove('hidden');
-
-      if (isPenalty) {
-        badge.className = "inline-block bg-rose-100 text-rose-800 text-[11px] font-bold px-3 py-1 rounded-full mb-2 border border-rose-200";
-        badge.innerHTML = "⚠️ 猶豫懲罰已觸發！";
-        emoji.textContent = PENALTY_MEAL.emoji;
-        title.textContent = PENALTY_MEAL.name;
-        note.textContent = PENALTY_MEAL.note;
-        punchline.textContent = PENALTY_MEAL.punchline;
-
-        rerollBtn.disabled = true;
-        rerollBtn.className = "flex-1 bg-slate-100 text-slate-400 font-bold py-3 px-3 rounded-xl text-xs border border-slate-200 cursor-not-allowed opacity-60";
-        rerollCountSpan.textContent = "已鎖定";
-      } else {
-        badge.className = "inline-block bg-orange-100 text-orange-800 text-[11px] font-bold px-3 py-1 rounded-full mb-2 border border-orange-200";
-        badge.innerHTML = food.type === 'treat' ? "🥩 想吃好點推薦" : "🍱 簡單吃飽推薦";
-        emoji.textContent = food.emoji;
-        title.textContent = food.name;
-        note.textContent = food.note;
-        punchline.textContent = food.punchline;
-
-        currentPickedFoodIndex = foodsDB.findIndex(f => f.id === food.id);
-
-        if (remainingRerolls > 0) {
-          rerollBtn.disabled = false;
-          rerollBtn.className = "flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-3 px-3 rounded-xl text-xs transition-all border border-slate-300 flex items-center justify-center gap-1 active:scale-95";
-          rerollCountSpan.textContent = `剩 ${remainingRerolls} 次`;
-        } else {
-          rerollBtn.disabled = true;
-          rerollBtn.className = "flex-1 bg-slate-100 text-slate-400 font-bold py-3 px-3 rounded-xl text-xs border border-slate-200 cursor-not-allowed opacity-60";
-          rerollCountSpan.textContent = "次數已盡";
+      const parseLine = line => {
+        const res = [];
+        let cur = '', inQ = false;
+        for (let i = 0; i < line.length; i++) {
+          const c = line[i];
+          if (c === '"') inQ = !inQ;
+          else if (c === ',' && !inQ) { res.push(cur.trim()); cur = ''; }
+          else cur += c;
         }
-      }
-
-      resultCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-    }
-
-    function reroll() {
-      if (remainingRerolls <= 0) {
-        displayResult(PENALTY_MEAL, true);
-        return;
-      }
-
-      remainingRerolls--;
-
-      if (remainingRerolls < 0) {
-        displayResult(PENALTY_MEAL, true);
-      } else {
-        const candidates = getCandidateFoods(currentCategoryFilter).filter(f => f.id !== foodsDB[currentPickedFoodIndex]?.id);
-        const nextFood = candidates.length > 0 
-          ? candidates[Math.floor(Math.random() * candidates.length)]
-          : foodsDB[Math.floor(Math.random() * foodsDB.length)];
-
-        displayResult(nextFood, false);
-      }
-    }
-
-    function acceptDecision() {
-      const titleText = document.getElementById('result-title').textContent;
-      let chosenItem;
-
-      if (titleText === PENALTY_MEAL.name) {
-        chosenItem = { ...PENALTY_MEAL, date: new Date().toLocaleDateString('zh-TW', { month: 'numeric', day: 'numeric' }) };
-      } else {
-        const found = foodsDB.find(f => f.name === titleText);
-        chosenItem = {
-          id: found ? found.id : 'custom_' + Date.now(),
-          name: titleText,
-          emoji: document.getElementById('result-emoji').textContent,
-          date: new Date().toLocaleDateString('zh-TW', { month: 'numeric', day: 'numeric' })
-        };
-      }
-
-      historyList.unshift(chosenItem);
-      if (historyList.length > 3) historyList = historyList.slice(0, 3);
-
-      saveHistory();
-      updateHistoryUI();
-
-      alert(`🎉 讚啦！已定案今晚吃【${chosenItem.name}】！祝你用餐愉快！`);
-    }
-
-    function resetDecisionState() {
-      remainingRerolls = 3;
-      document.getElementById('result-card').classList.add('hidden');
-      alert("🔄 決策次數已重置為 3 次！");
-    }
-
-    function loadHistory() {
-      try {
-        const stored = localStorage.getItem('dinner_history_list');
-        if (stored) historyList = JSON.parse(stored);
-      } catch (e) {}
-    }
-
-    function saveHistory() {
-      try {
-        localStorage.setItem('dinner_history_list', JSON.stringify(historyList));
-      } catch (e) {}
-    }
-
-    function updateHistoryUI() {
-      document.getElementById('history-count').textContent = historyList.length;
-      const historyListEl = document.getElementById('history-list');
-
-      if (historyList.length === 0) {
-        historyListEl.innerHTML = `<li class="text-xs text-slate-400 text-center py-4 bg-slate-50 rounded-2xl border border-dashed border-slate-200">還沒有紀錄，快抽一個吧！</li>`;
-        return;
-      }
-
-      historyListEl.innerHTML = historyList.map(item => `
-        <li class="flex items-center justify-between p-2.5 bg-amber-50/70 rounded-xl border border-amber-100 text-xs">
-          <div class="flex items-center gap-2 font-bold text-slate-700">
-            <span class="text-base">${item.emoji}</span>
-            <span>${item.name}</span>
-          </div>
-          <span class="text-amber-800 text-[10px] bg-amber-100/80 px-2 py-0.5 rounded-full">${item.date || '最近'}</span>
-        </li>
-      `).join('');
-    }
-
-    function clearHistory() {
-      historyList = [];
-      saveHistory();
-      updateHistoryUI();
-      toggleHistoryModal(false);
-    }
-
-    function toggleHistoryModal(show) {
-      document.getElementById('history-modal').classList.toggle('hidden', !show);
-    }
-
-    function addCustomFood() {
-      const name = document.getElementById('add-name').value.trim();
-      const type = document.getElementById('add-type').value;
-      const emoji = document.getElementById('add-emoji').value.trim() || "🍱";
-      const note = document.getElementById('add-note').value.trim() || "美味享用，補滿熱量！";
-
-      if (!name) {
-        alert("請輸入食物名稱！");
-        return;
-      }
-
-      const newItem = {
-        id: 'user_' + Date.now(),
-        name,
-        type,
-        emoji,
-        moods: [type === 'treat' ? 'tired' : 'quick'],
-        isSoup: false,
-        note,
-        punchline: "這可是你的個人專屬口袋名單，吃起來格外美味！"
+        res.push(cur.trim());
+        return res.map(v => v.replace(/^"|"$/g, '').replace(/""/g, '"'));
       };
 
-      foodsDB.unshift(newItem);
-      saveDatabase();
-      renderPocketMenuList();
+      const headers = parseLine(lines[0]);
+      const items = [];
 
-      // Reset Form
-      document.getElementById('add-name').value = '';
-      document.getElementById('add-note').value = '';
-      alert(`已將【${name}】加入口袋菜單！`);
+      for (let i = 1; i < lines.length; i++) {
+        if (!lines[i].trim()) continue;
+        const vals = parseLine(lines[i]);
+        if (vals.length < 2) continue;
+
+        items.push({
+          id: "sheet_" + i,
+          name: vals[0] || "未命名美食",
+          category: vals[1] || "簡單吃飽",
+          emoji: vals[2] || "🍱",
+          temp: vals[3] || "乾食",
+          flavor: vals[4] || "一般",
+          lateNight: vals[5] === "是",
+          rainy: vals[6] === "是",
+          tags: vals[7] ? vals[7].split(',').map(s => s.trim()) : [],
+          note: vals[8] || "美食當前，享用就對了！",
+          punchline: "命運指派，不許挑食！"
+        });
+      }
+
+      return items;
     }
 
-    function removeCustomFood(id) {
-      foodsDB = foodsDB.filter(f => f.id !== id);
-      saveDatabase();
-      renderPocketMenuList();
+    // Load / Save Local Storage
+    function loadSavedMenu() {
+      const saved = localStorage.getItem('dinner_custom_menu');
+      if (saved) {
+        try { currentMenu = JSON.parse(saved); } catch(e) { currentMenu = FALLBACK_MENU; }
+      } else {
+        currentMenu = FALLBACK_MENU;
+      }
+      document.getElementById('menuCount').innerText = currentMenu.length;
     }
 
-    function renderPocketMenuList() {
-      const listEl = document.getElementById('pocket-menu-list');
-      document.getElementById('custom-count-badge').textContent = `共 ${foodsDB.length} 項`;
+    // Decision Logic
+    function pickDinner(filter = 'ALL') {
+      lastFilter = filter;
+      rerollChances = 2;
+      updateChanceUI();
 
-      listEl.innerHTML = foodsDB.map(food => `
-        <div class="flex items-center justify-between p-2 bg-slate-50 rounded-xl border border-slate-100 text-xs">
+      let candidates = currentMenu;
+      if (filter === '想吃好點') {
+        candidates = currentMenu.filter(i => i.category === '想吃好點');
+      } else if (filter === '簡單吃飽') {
+        candidates = currentMenu.filter(i => i.category === '簡單吃飽');
+      }
+
+      if (candidates.length === 0) candidates = currentMenu;
+
+      const chosen = candidates[Math.floor(Math.random() * candidates.length)];
+      displayResult(chosen);
+    }
+
+    function rerollDinner() {
+      if (rerollChances <= 0) return;
+
+      rerollChances--;
+      updateChanceUI();
+
+      if (rerollChances === 0) {
+        // Trigger Punishment Item
+        const punishment = {
+          name: "便利商店茶葉蛋 + 地瓜 + 蛋白飲",
+          category: "懲罰",
+          emoji: "🥚",
+          temp: "乾食",
+          flavor: "極致健康",
+          tags: ["懲罰套餐", "猶豫不決"],
+          note: "這是換太多次的猶豫處罰！",
+          punchline: "你已經換太多次了！請接受超商組合作為懲罰！"
+        };
+        displayResult(punishment);
+      } else {
+        let candidates = currentMenu;
+        if (lastFilter === '想吃好點') candidates = currentMenu.filter(i => i.category === '想吃好點');
+        else if (lastFilter === '簡單吃飽') candidates = currentMenu.filter(i => i.category === '簡單吃飽');
+        if (candidates.length === 0) candidates = currentMenu;
+
+        const chosen = candidates[Math.floor(Math.random() * candidates.length)];
+        displayResult(chosen);
+      }
+    }
+
+    function displayResult(item) {
+      currentSelectedItem = item;
+
+      document.getElementById('placeholderState').classList.add('hidden');
+      const content = document.getElementById('resultContent');
+      content.classList.remove('hidden');
+
+      // Trigger Spin Anim
+      const emojiEl = document.getElementById('foodEmoji');
+      emojiEl.classList.remove('spin-anim');
+      void emojiEl.offsetWidth; // Force Reflow
+      emojiEl.classList.add('spin-anim');
+
+      emojiEl.innerText = item.emoji || "🍱";
+      document.getElementById('foodName').innerText = item.name;
+      document.getElementById('foodNote').innerText = item.note ? `"${item.note}"` : `"好好享受這一餐！"`;
+      document.getElementById('foodPunchline').innerText = `👉 ${item.punchline || "別想了，現在就出發！"}`;
+
+      // Badges
+      const badgesContainer = document.getElementById('foodBadges');
+      badgesContainer.innerHTML = '';
+
+      const catBadge = document.createElement('span');
+      catBadge.className = item.category === '想吃好點' ? "px-2.5 py-0.5 rounded-full text-xs font-bold bg-rose-100 text-rose-800" : "px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800";
+      catBadge.innerText = item.category;
+      badgesContainer.appendChild(catBadge);
+
+      if (item.temp) {
+        const tempB = document.createElement('span');
+        tempB.className = "px-2.5 py-0.5 rounded-full text-xs font-bold bg-blue-100 text-blue-800";
+        tempB.innerText = item.temp;
+        badgesContainer.appendChild(tempB);
+      }
+
+      if (item.flavor) {
+        const flavB = document.createElement('span');
+        flavB.className = "px-2.5 py-0.5 rounded-full text-xs font-bold bg-purple-100 text-purple-800";
+        flavB.innerText = item.flavor;
+        badgesContainer.appendChild(flavB);
+      }
+
+      // Enable Reroll Button
+      const rerollBtn = document.getElementById('rerollBtn');
+      if (rerollChances > 0) {
+        rerollBtn.disabled = false;
+        rerollBtn.className = "w-full bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-2xl font-bold text-sm flex items-center justify-center gap-2 transition active:scale-98 cursor-pointer shadow-md";
+      } else {
+        rerollBtn.disabled = true;
+        rerollBtn.className = "w-full bg-slate-200 text-slate-400 py-3 rounded-2xl font-bold text-sm flex items-center justify-center gap-2 transition cursor-not-allowed";
+      }
+    }
+
+    function updateChanceUI() {
+      document.getElementById('chanceCount').innerText = rerollChances;
+      document.getElementById('rerollText').innerText = rerollChances > 0 ? `剩 ${rerollChances} 次` : '決策鎖定';
+    }
+
+    // Manual Pocket Menu Management
+    function renderPocketList() {
+      const list = document.getElementById('pocketList');
+      list.innerHTML = '';
+
+      currentMenu.forEach((item, index) => {
+        const div = document.createElement('div');
+        div.className = "p-2.5 bg-white rounded-xl border border-slate-200 flex items-center justify-between text-xs";
+        div.innerHTML = `
           <div class="flex items-center gap-2">
-            <span class="text-base">${food.emoji}</span>
+            <span class="text-base">${item.emoji || '🍱'}</span>
             <div>
-              <div class="font-bold text-slate-800">${food.name}</div>
-              <div class="text-[10px] text-slate-400">${food.type === 'treat' ? '🥩 想吃好點' : '🍱 簡單吃飽'}</div>
+              <strong class="text-slate-800">${item.name}</strong>
+              <div class="text-[10px] text-slate-400">${item.category} • ${item.flavor || ''}</div>
             </div>
           </div>
-          <button onclick="removeCustomFood('${food.id}')" class="text-slate-300 hover:text-rose-500 p-1 text-xs transition-colors">
+          <button onclick="deleteCustomItem(${index})" class="text-slate-300 hover:text-red-500 p-1">
             <i class="fa-solid fa-trash-can"></i>
           </button>
-        </div>
-      `).join('');
+        `;
+        list.appendChild(div);
+      });
+    }
+
+    function addCustomItem() {
+      const emoji = document.getElementById('addEmoji').value.trim() || '🍱';
+      const name = document.getElementById('addName').value.trim();
+      const category = document.getElementById('addCategory').value;
+      const note = document.getElementById('addNote').value.trim() || '口袋熱門美食';
+
+      if (!name) return alert('請輸入食物名稱');
+
+      currentMenu.unshift({
+        id: "custom_" + Date.now(),
+        name, category, emoji,
+        temp: "乾食", flavor: "自訂風格",
+        note, punchline: "自己新增的美味選項！"
+      });
+
+      localStorage.setItem('dinner_custom_menu', JSON.stringify(currentMenu));
+      document.getElementById('addName').value = '';
+      document.getElementById('addNote').value = '';
+      document.getElementById('menuCount').innerText = currentMenu.length;
+      renderPocketList();
+    }
+
+    function deleteCustomItem(index) {
+      currentMenu.splice(index, 1);
+      localStorage.setItem('dinner_custom_menu', JSON.stringify(currentMenu));
+      document.getElementById('menuCount').innerText = currentMenu.length;
+      renderPocketList();
+    }
+
+    function resetDefaultMenu() {
+      if (confirm('確定要恢復為預設菜單嗎？')) {
+        localStorage.removeItem('dinner_custom_menu');
+        currentMenu = FALLBACK_MENU;
+        document.getElementById('menuCount').innerText = currentMenu.length;
+        renderPocketList();
+      }
     }
   </script>
 </body>
